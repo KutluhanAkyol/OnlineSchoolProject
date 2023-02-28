@@ -1,3 +1,11 @@
 npx sequelize-cli model:generate --name student --attributes name:string,surname:string,classNumber:string,perm:string
 npx sequelize-cli model:generate --name teacher --attributes name:string,surname:string,tNumber:string,perm:string
-npx sequelize-cli model:generate --name class --attributes lesson:string,teacherName:string,studentName:string
+npx sequelize-cli model:generate --name sinif --attributes className:string,lessonName:string,teacherName:string,studentName:string
+sequelize-cli db:migrate
+
+// const token=jwt.sign({
+            //     classNmber:classNumber,
+            //     permmisions:perm,
+            //     exp:Math.floor(Date.now()/1000)+60
+
+            //  }, SECRET_KEY)
