@@ -50,14 +50,16 @@ app.post("/register",urlencodedParser,(req,res)=>{
     let kName=req.body.name
     let kSurname=req.body.surname
     let kClassNumber=req.body.classNumber
+    let kClass=req.body.class
 
-    Studet.create({name:kName,surname:kSurname,classNumber:kClassNumber,perm:'student'}).then(user=>{
+    Studet.create({name:kName,surname:kSurname,classNumber:kClassNumber,class:kClass,perm:'student'}).then(user=>{
 
         res.send(`Yeni Öğrenci Kayıdı Başarı İle Gerçekleşti \nHoşgeldin Aramıza ${kName} ${kSurname}`)
 
         // res.sendFile("C:/Users/DC/Desktop/NewProject/html/login.html")
     }).catch(e=>console.log(e))
 })
+var loginUser
 app.post("/login",urlencodedParser,(req,res)=>{
     let sNumber=req.body.clasNumber
     Studet.findAll().then(user=>{
@@ -69,12 +71,15 @@ app.post("/login",urlencodedParser,(req,res)=>{
             if(sNumber==user[i].classNumber){
                 // console.log(user[i].classNumber)
                 const createToken=jwt.sign({
-                    snfNumber:user[i].classNumber,
+                    snfNumber:sNumber,
                     perm:'studet'
                 },process.env.SECRET_KEY,{expiresIn:'2m'})
                 // console.log(createToken)
-                console.log(`Öğrenci Tokeniniz Oluşturulmuştur \n${createToken}`)
-                
+                // console.log(`Öğrenci Tokeniniz Oluşturulmuştur \n${createToken}`)
+                res.send({createToken})
+                loginUser=user[i].class
+                //#291b1b
+                // 
                 // res.sendFile("C:/Users/DC/Desktop/NewProject/html/anasayfa.html")
                 break;
             }else{
@@ -98,7 +103,7 @@ app.post("/ogrmnlogn",urlencodedParser,(req,res)=>{
                     ogrtmnNumber:req.body.teacher,
                     perm:'teacher'
                 },process.env.SECRET_KEY_OGRMT,{expiresIn:'2m'})
-                console.log("Oğretmen Tokeni: ",ogrtmnCreatToken)
+                res.send({ogrtmnCreatToken})
                
                 // res.sendFile("C:/Users/DC/Desktop/NewProject/html/anasayfa.html")
                 break;
@@ -136,21 +141,14 @@ app.post("/creatDers",urlencodedParser,ogrmtcheckJwt,(req,res)=>{
 app.get("/dersler",checkJwt,(req,res)=>{
     Sinif.findAll().then(User=>{
         for(let i=0;i<User.length;i++){
-            res.send(User[i])
+            if(loginUser==User[i].className){
+                res.send(User[i])
+            }else{
+                res.send("Şuanda Bulunduğunuz Sınıfta Ders Bulunmamaktadır")
+            }
         }
     })
 })
-
-
-
-
-
-
-
-
-
-
-
 
 app.listen(port,()=>{
     console.log(`Server Aktif Bro \n{localhost:${port}}\nKolay Gelsin`)
