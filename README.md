@@ -2,6 +2,9 @@
 <h1>MrGanK Online School Project</h1>
 
 <p>Bu projede öğretmen bir sınıfta ders oluşturuyor ve öğrenci derslere baktığında sınıfında ders olup olmadığını görüyor. Proje bize verilirken Ders Silme yapılacak denmediği için ders silme yapmadım</p>
+<br>
+<h2> Kullanılan Kütüphaneler</h2>
+<p>Bu projede Node.js ile Express.js, JsonWebToken, BodyParser, Dotenv Kullanılmıştır</p>
 <br><br>
 <h2>Öğrenci Register</h2>
 <img src="./img/ogrenciRegister.png">
