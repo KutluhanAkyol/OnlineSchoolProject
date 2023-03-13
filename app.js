@@ -18,33 +18,9 @@ const Sinif = require ('./models').sinif
 
 app.use(bodyParser.json())
 app.use(express.json())
-app.use(express.static("C:/Users/DC/Desktop/NewProject"))
 var urlencodedParser= bodyParser.urlencoded({extended:true})
 // app.use(session({'secret':'aQzqr425'}))
 
-
-app.get("/login",(req,res)=>{
-    
-    res.sendFile("C:/Users/DC/Desktop/NewProject/html/login.html")
-   
-})
-app.get("/register",(req,res)=>{
-    res.sendFile("C:/Users/DC/Desktop/NewProject/html/register.html")
-})
-app.get("/student",checkJwt,(req,res)=>{
-    res.sendFile("C:/Users/DC/Desktop/NewProject/html/anasayfa.html")
-})
-app.get("/logout",(req,res)=>{
-    delete req.session.adi
-    res.redirect("/login")
-})
-app.get("/ogrmrkyt",(req,res)=>{
-    res.sendFile("C:/Users/DC/Desktop/NewProject/html/ogrmrkyt.html")
-})
-// C:\Users\DC\Desktop\NewProject\html\login.html
-app.get("/ogrmlogn",(req,res)=>{
-    res.sendFile("C:/Users/DC/Desktop/NewProject/html/ogrmlogn.html")
-})
 app.post("/register",urlencodedParser,(req,res)=>{
 
     let kName=req.body.name
