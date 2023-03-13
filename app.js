@@ -9,7 +9,7 @@ dotenv.config()
 
 const port=3000
 const app=express()
-const Router=express.Router()
+
 
 const Studet = require ('./models').student
 const Teacher = require ('./models').teacher
@@ -54,7 +54,7 @@ app.post("/register",urlencodedParser,(req,res)=>{
 
     Studet.create({name:kName,surname:kSurname,classNumber:kClassNumber,class:kClass,perm:'student'}).then(user=>{
 
-        res.send(`Yeni Öğrenci Kayıdı Başarı İle Gerçekleşti \nHoşgeldin Aramıza ${kName} ${kSurname}`)
+        res.send(`New Student Registration Successfully Made \nWelcome to Us ${kName} ${kSurname}`)
 
         // res.sendFile("C:/Users/DC/Desktop/NewProject/html/login.html")
     }).catch(e=>console.log(e))
@@ -62,13 +62,14 @@ app.post("/register",urlencodedParser,(req,res)=>{
 var loginUser
 app.post("/login",urlencodedParser,(req,res)=>{
     let sNumber=req.body.clasNumber
+    let kName=req.body.name
     Studet.findAll().then(user=>{
         // console.log(user.length)
         for(let i=0;i<user.length;i++){
 
             // console.log(user[i].classNumber)
 
-            if(sNumber==user[i].classNumber){
+            if(sNumber==user[i].classNumber && kname== user[i].name){
                 // console.log(user[i].classNumber)
                 const createToken=jwt.sign({
                     snfNumber:sNumber,
@@ -83,7 +84,7 @@ app.post("/login",urlencodedParser,(req,res)=>{
                 // res.sendFile("C:/Users/DC/Desktop/NewProject/html/anasayfa.html")
                 break;
             }else{
-                console.log("Hata!!")
+                console.log("Your Class Number And Name Is Incorrect")
             }
         }
     })
@@ -93,7 +94,7 @@ app.post("/login",urlencodedParser,(req,res)=>{
 
 // }
 app.post("/ogrmnlogn",urlencodedParser,(req,res)=>{
-    let tNumber=req.body.teacher
+    let tNumber=req.body.TNumber
     Teacher.findAll().then(tUser=>{
 
         for(let i=0;i<tUser.length;i++){
@@ -108,7 +109,7 @@ app.post("/ogrmnlogn",urlencodedParser,(req,res)=>{
                 // res.sendFile("C:/Users/DC/Desktop/NewProject/html/anasayfa.html")
                 break;
             }else{
-                console.log("Hatalı")
+                console.log("Your Teacher Number is Incorrect")
             }
         }
 
@@ -123,7 +124,7 @@ app.post("/ogrmrkyt",urlencodedParser,(req,res)=>{
     let phoneNumber=req.body.tNumber
     let perms='teacher'
     Teacher.create({name:ogrtmnName,surname:ogrtmnSurname,tNumber:phoneNumber,perm:perms}).then(user=>{
-        res.send(`Öğretmen Kayıtı Başarılı. Aramıza Hoşgeldiniz ${ogrtmnName} ${ogrtmnSurname}`)
+        res.send(`Teacher Registration Successful. Welcome ${ogrtmnName} ${ogrtmnSurname}`)
     }).catch(e=>console.log(e))
 })
 
@@ -133,7 +134,7 @@ app.post("/creatDers",urlencodedParser,ogrmtcheckJwt,(req,res)=>{
     let teacherrName=req.body.teacher
     let studenttName=req.body.student
     Sinif.create({className:classesName,lessonName:lessoName,teacherName:teacherrName,studentName:studenttName}).then(user=>{
-        res.send("Ders Oluşturuldu")
+        res.send("Course Created")
     }).catch(e=>console.log(e))
 })
 
@@ -144,12 +145,12 @@ app.get("/dersler",checkJwt,(req,res)=>{
             if(loginUser==User[i].className){
                 res.send(User[i])
             }else{
-                res.send("Şuanda Bulunduğunuz Sınıfta Ders Bulunmamaktadır")
+                res.send("There are no courses in your current class.")
             }
         }
     })
 })
 
 app.listen(port,()=>{
-    console.log(`Server Aktif Bro \n{localhost:${port}}\nKolay Gelsin`)
+    console.log(`Server Active Bro \n{localhost:${port}}\nGood luck`)
 })
